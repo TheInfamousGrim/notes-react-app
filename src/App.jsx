@@ -11,7 +11,7 @@ import { data } from './data';
 
 function App() {
     const [notes, setNotes] = useState(
-        JSON.parse(localStorage.getItem('reactNotesAppNotesArray')) || []
+        () => JSON.parse(localStorage.getItem('reactNotesAppNotesArray')) || []
     );
     const [currentNoteId, setCurrentNoteId] = useState(
         (notes[0] && notes[0].id) || ''
