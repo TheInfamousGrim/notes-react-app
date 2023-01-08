@@ -5,6 +5,7 @@ import { Bars3BottomLeftIcon } from '@heroicons/react/24/outline';
 // Components
 import Sidebar from './components/Sidebar';
 import Editor from './components/Editor';
+import Footer from './components/Footer';
 
 // Data
 import { data } from './data';
@@ -99,6 +100,7 @@ function App() {
                                 />
                             )}
                         </main>
+                        <Footer />
                     </div>
                 </>
             ) : (
