@@ -12,7 +12,16 @@ function classNames(...classes) {
 }
 
 export default function Sidebar(props) {
-    const noteElements = props.notes.map((note, index) => (
+    const getNotesTitle = (noteText) => {
+        const splitNote = noteText.split(/\r?\n/);
+        const trimmedTitle = splitNote[0]
+            .split('')
+            .filter((char) => /[\w\d\s]/.test(char))
+            .join('');
+        return trimmedTitle;
+    };
+
+    const noteElements = props.notes.map((note) => (
         <div key={note.id}>
             <button
                 type="button"
@@ -20,7 +29,7 @@ export default function Sidebar(props) {
                     note.id === props.currentNote.id
                         ? 'bg-primary-light text-base-dark'
                         : 'text-gray-300 hover:bg-base-light hover:text-white',
-                    'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
+                    'group flex items-center px-2 py-2 mr-auto max-w-full text-sm font-medium rounded-md truncate'
                 )}
                 onClick={() => props.setCurrentNoteId(note.id)}
             >
@@ -33,7 +42,9 @@ export default function Sidebar(props) {
                     )}
                     aria-hidden="true"
                 />
-                <h4 className="flex-1 font-bold">Note {index + 1}</h4>
+                <h4 className="flex-1 font-bold text-ellipsis overflow-hidden ...">
+                    {getNotesTitle(note.body)}
+                </h4>
             </button>
         </div>
     ));
