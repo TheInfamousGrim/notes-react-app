@@ -22,16 +22,21 @@ export default function Sidebar(props) {
     };
 
     const noteElements = props.notes.map((note) => (
-        <div key={note.id}>
+        <div
+            key={note.id}
+            className="tooltip tooltip-top w-full"
+            data-tip={getNotesTitle(note.body)}
+        >
             <button
                 type="button"
                 className={classNames(
                     note.id === props.currentNote.id
                         ? 'bg-primary-light text-base-dark'
                         : 'text-gray-300 hover:bg-base-light hover:text-white',
-                    'group flex items-center px-2 py-2 mr-auto max-w-full text-sm font-medium rounded-md truncate'
+                    'group flex items-center px-2 py-2 mr-auto w-full text-sm font-medium rounded-md truncate '
                 )}
                 onClick={() => props.setCurrentNoteId(note.id)}
+                data-tip={getNotesTitle(note.body)}
             >
                 <PencilSquareIcon
                     className={classNames(
