@@ -3,15 +3,22 @@ import React, { Fragment, useState } from 'react';
 import {
     PencilSquareIcon,
     PlusIcon,
+    TrashIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline';
 import { Dialog, Transition } from '@headlessui/react';
+import { motion } from 'framer-motion';
+
+// Components
+import DismissModal from './DismissModal';
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
 }
 
 export default function Sidebar(props) {
+    const [modalOpen, setModalOpen] = useState(false);
+
     const getNotesTitle = (noteText) => {
         const splitNote = noteText.split(/\r?\n/);
         const trimmedTitle = splitNote[0]
@@ -24,7 +31,7 @@ export default function Sidebar(props) {
     const noteElements = props.notes.map((note) => (
         <div
             key={note.id}
-            className="tooltip tooltip-top w-full"
+            className="tooltip tooltip-top tooltip-w-1 w-full"
             data-tip={getNotesTitle(note.body)}
         >
             <button
@@ -33,10 +40,9 @@ export default function Sidebar(props) {
                     note.id === props.currentNote.id
                         ? 'bg-primary-light text-base-dark'
                         : 'text-gray-300 hover:bg-base-light hover:text-white',
-                    'group flex items-center px-2 py-2 mr-auto w-full text-sm font-medium rounded-md truncate '
+                    'group flex items-center px-2 py-2 mr-auto w-full text-sm font-medium rounded-md truncate'
                 )}
                 onClick={() => props.setCurrentNoteId(note.id)}
-                data-tip={getNotesTitle(note.body)}
             >
                 <PencilSquareIcon
                     className={classNames(
@@ -50,12 +56,50 @@ export default function Sidebar(props) {
                 <h4 className="flex-1 font-bold text-ellipsis overflow-hidden ...">
                     {getNotesTitle(note.body)}
                 </h4>
+                <motion.button
+                    type="button"
+                    className="p-0.5 focus:outline-none"
+                    onClick={() => setModalOpen(true)}
+                    whileHover={{
+                        scale: 1.3,
+                        translateY: '-.1rem',
+                        backgroundColor: '#E51F3A',
+                        boxShadow: '0 1rem 2rem rgba(0, 0, 0, 0.2)',
+                        borderRadius: '50%',
+                    }}
+                    whileTap={{
+                        translateY: 0,
+                    }}
+                    whileFocus={{
+                        scale: 1.3,
+                        translateY: '-.1rem',
+                        backgroundColor: '#E51F3A',
+                        boxShadow: '0 1rem 2rem rgba(0, 0, 0, 0.2)',
+                        borderRadius: '50%',
+                    }}
+                >
+                    <TrashIcon
+                        className={classNames(
+                            note.id === props.currentNote.id
+                                ? 'text-base-dark'
+                                : 'text-white group-hover:text-gray-300',
+                            'flex-shrink-0 h-6 w-6'
+                        )}
+                        aria-hidden="true"
+                    />
+                </motion.button>
             </button>
         </div>
     ));
 
     return (
         <>
+            <DismissModal
+                modalOpen={modalOpen}
+                setModalOpen={setModalOpen}
+                deleteNote={props.deleteNote}
+                currentNoteId={props.currentNote.id}
+            />
             <Transition.Root show={props.sidebarOpen} as={Fragment}>
                 <Dialog
                     as="div"

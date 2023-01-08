@@ -48,6 +48,13 @@ function App() {
         });
     }
 
+    function deleteNote(event, noteId) {
+        event.stopPropagation();
+        setNotes((oldNotes) =>
+            oldNotes.filter((oldNote) => oldNote.id !== noteId)
+        );
+    }
+
     return (
         <main className="bg-base-100">
             {notes.length > 0 ? (
@@ -57,6 +64,7 @@ function App() {
                         currentNote={findCurrentNote()}
                         setCurrentNoteId={setCurrentNoteId}
                         newNote={createNewNote}
+                        deleteNote={deleteNote}
                         setSidebarOpen={setSidebarOpen}
                         sidebarOpen={sidebarOpen}
                     />
