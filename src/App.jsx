@@ -36,13 +36,16 @@ function App() {
     }, [notes]);
 
     function updateNote(text) {
-        setNotes((oldNotes) =>
-            oldNotes.map((oldNote) =>
+        // Put the most recently modified note at the top of the sidebar navigation
+        setNotes((oldNotes) => {
+            const newArray = [];
+            oldNotes.forEach((oldNote) => {
                 oldNote.id === currentNoteId
-                    ? { ...oldNote, body: text }
-                    : oldNote
-            )
-        );
+                    ? newArray.unshift({ ...oldNote, body: text })
+                    : newArray.push(oldNote);
+            });
+            return newArray;
+        });
     }
 
     return (
