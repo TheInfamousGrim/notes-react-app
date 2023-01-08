@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
 import { Bars3BottomLeftIcon } from '@heroicons/react/24/outline';
 
@@ -10,11 +10,17 @@ import Editor from './components/Editor';
 import { data } from './data';
 
 function App() {
-    const [notes, setNotes] = useState([]);
+    const [notes, setNotes] = useState(
+        JSON.parse(localStorage.getItem('reactNotesAppNotesArray')) || []
+    );
     const [currentNoteId, setCurrentNoteId] = useState(
         (notes[0] && notes[0].id) || ''
     );
     const [sidebarOpen, setSidebarOpen] = useState(false);
+
+    function findCurrentNote() {
+        return notes.find((note) => note.id === currentNoteId) || notes[0];
+    }
 
     function createNewNote() {
         const newNote = {
@@ -25,6 +31,10 @@ function App() {
         setCurrentNoteId(newNote.id);
     }
 
+    useEffect(() => {
+        localStorage.setItem('reactNotesAppNotesArray', JSON.stringify(notes));
+    }, [notes]);
+
     function updateNote(text) {
         setNotes((oldNotes) =>
             oldNotes.map((oldNote) =>
@@ -33,10 +43,6 @@ function App() {
                     : oldNote
             )
         );
-    }
-
-    function findCurrentNote() {
-        return notes.find((note) => note.id === currentNoteId) || notes[0];
     }
 
     return (
